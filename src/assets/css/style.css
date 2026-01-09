@@ -9,6 +9,23 @@
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(30, 58, 138, 0.1);
 }
+.dashFirstRow{
+  display: grid;
+  grid-template-columns: 0.5fr 0.5fr;
+  column-gap: 10px;
+}
+.text-muted{
+  font-size: 0.9rem;
+}
+.dashFirstRowFC{
+  display: grid;
+  column-gap: 10px;
+  row-gap: 10px;
+  grid-template-columns: 0.33fr 0.33fr 0.33fr;
+}
+.dashFirstRow div{
+  text-align: center;
+}
 /* dashboard */
 /* restaurant */
 .resturntMainDiv {

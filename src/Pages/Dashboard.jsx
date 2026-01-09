@@ -14,135 +14,131 @@ import {
   TableRow,
   Paper,
   Typography,
-  Box
-} from '@mui/material';
+  Box,
+} from "@mui/material";
 
 export default function Dashboard() {
-  const [reservationCount, setReservationCount] = useState({
-    totalReservationCount: 0,
-    confirmReservationCount: 0,
-    pendingReservationCount: 0,
-  });
- const rows = [
-    { id: 1, name: 'John Doe', age: "25", department: 'Engineering', salary: '$75,000' },
-    { id: 2, name: 'Jane Smith', age: "28", department: 'Marketing', salary: '$65,000' },
-    { id: 3, name: 'Bob Johnson', age: "35", department: 'Sales', salary: '$85,000' },
-    { id: 4, name: 'Alice Brown', age: "32", department: 'HR', salary: '$60,000' },
-    { id: 5, name: 'Charlie Wilson', age: "40", department: 'Engineering', salary: '$95,000' },
-  ];
-
-  const getReservationCount = async () => {
+  const [dashboardCount, setDashboardCount] = useState({});
+  const [reservations, setReservations] = useState([]);
+  const getDashboardCount = async () => {
     try {
-      const response = await api.get("Dashboard/GetReservationCount");
-      setReservationCount(response.data);
+      const response = await api.get("Dashboard/GetDashboardCount");
+      setDashboardCount(response.data);
+    } catch (error) {
+      console.error("Error fetching reservation count:", error);
+    }
+  };
+  const getReservations = async () => {
+    try {
+      const response = await api.get("Dashboard/GetTop10ConfirmedReservation");
+      setReservations(response.data);
     } catch (error) {
       console.error("Error fetching reservation count:", error);
     }
   };
 
   useEffect(() => {
-    getReservationCount();
+    getDashboardCount();
+    getReservations();
   }, []);
 
   return (
     <div className="container-fluid p-4 bg-light min-vh-100">
       <div className="dashHeading">Dashboard</div>
-      <div className="row g-3 mb-4">
-        <div className="col-lg-7 col-md-12">
-          <div className="row g-3">
-            <div className="col-md-4">
-              <Card elevation={3} className="rounded-4">
-                <CardContent>
-                  <h6 className="text-muted">Total Reservations</h6>
-                  <h2 className="fw-bold">
-                    {reservationCount?.totalReservationCount}
-                  </h2>
-                </CardContent>
-              </Card>
-            </div>
-            <div className="col-md-4">
-              <Card elevation={3} className="rounded-4">
-                <CardContent>
-                  <h6 className="text-muted">Total Events</h6>
-                  <h2 className="fw-bold">
-                    {reservationCount?.totalReservationCount}
-                  </h2>
-                </CardContent>
-              </Card>
-            </div>
-            <div className="col-md-4">
-              <Card elevation={3} className="rounded-4">
-                <CardContent>
-                  <h6 className="text-muted">Confirmed Reservations</h6>
-                  <h2 className="fw-bold">
-                    {reservationCount?.confirmReservationCount}
-                  </h2>
-                </CardContent>
-              </Card>
-            </div>
-            <div className="col-md-4">
-              <Card elevation={3} className="rounded-4">
-                <CardContent>
-                  <h6 className="text-muted">Confirmed Events</h6>
-                  <h2 className="fw-bold">
-                    {reservationCount?.totalReservationCount}
-                  </h2>
-                </CardContent>
-              </Card>
-            </div>
-            <div className="col-md-4">
-              <Card elevation={3} className="rounded-4">
-                <CardContent>
-                  <h6 className="text-muted">Pending Reservations</h6>
-                  <h2 className="fw-bold">
-                    {reservationCount?.pendingReservationCount}
-                  </h2>
-                </CardContent>
-              </Card>
-            </div>
-            <div className="col-md-4">
-              <Card elevation={3} className="rounded-4">
-                <CardContent>
-                  <h6 className="text-muted">Pending Events</h6>
-                  <h2 className="fw-bold">
-                    {reservationCount?.pendingReservationCount}
-                  </h2>
-                </CardContent>
-              </Card>
-            </div>
-            <div className="col-md-4">
-              <Card elevation={3} className="rounded-4">
-                <CardContent>
-                  <h6 className="text-muted">Cancelled Reservations</h6>
-                  <h2 className="fw-bold">
-                    {reservationCount?.pendingReservationCount}
-                  </h2>
-                </CardContent>
-              </Card>
-            </div>
-            <div className="col-md-4">
-              <Card elevation={3} className="rounded-4">
-                <CardContent>
-                  <h6 className="text-muted">Cancelled Events</h6>
-                  <h2 className="fw-bold">
-                    {reservationCount?.totalReservationCount}
-                  </h2>
-                </CardContent>
-              </Card>
-            </div>
-            <div className="col-md-4">
-              <Card elevation={3} className="rounded-4">
-                <CardContent>
-                  <h6 className="text-muted">Customer Reviews</h6>
-                  <h2 className="fw-bold">
-                    {reservationCount?.totalReservationCount}
-                  </h2>
-                </CardContent>
-              </Card>
-            </div>
+      <div className="dashFirstRow">
+        <div className="dashFirstRowFC">
+          <div>
+            <Card elevation={3} className="rounded-4">
+              <CardContent>
+                <h6 className="text-muted">Total Reservations</h6>
+                <h2 className="fw-bold">
+                  {dashboardCount?.totalReservationCount}
+                </h2>
+              </CardContent>
+            </Card>
+          </div>
+          <div>
+            <Card elevation={3} className="rounded-4">
+              <CardContent>
+                <h6 className="text-muted">Confirmed Reservations</h6>
+                <h2 className="fw-bold">
+                  {dashboardCount?.confirmedReservationCount}
+                </h2>
+              </CardContent>
+            </Card>
+          </div>
+          <div>
+            <Card elevation={3} className="rounded-4">
+              <CardContent>
+                <h6 className="text-muted">Pending Reservations</h6>
+                <h2 className="fw-bold">
+                  {dashboardCount?.pendingReservationCount}
+                </h2>
+              </CardContent>
+            </Card>
+          </div>
+          <div>
+            <Card elevation={3} className="rounded-4">
+              <CardContent>
+                <h6 className="text-muted">Cancelled Reservations</h6>
+                <h2 className="fw-bold">
+                  {dashboardCount?.cancelledReservationCount}
+                </h2>
+              </CardContent>
+            </Card>
+          </div>
+          <div>
+            <Card elevation={3} className="rounded-4">
+              <CardContent>
+                <h6 className="text-muted">Total Events</h6>
+                <h2 className="fw-bold">
+                  {dashboardCount?.totalEventQueryCount}
+                </h2>
+              </CardContent>
+            </Card>
+          </div>
+          <div>
+            <Card elevation={3} className="rounded-4">
+              <CardContent>
+                <h6 className="text-muted">Confirmed Events</h6>
+                <h2 className="fw-bold">
+                  {dashboardCount?.confirmedEventQueryCount}
+                </h2>
+              </CardContent>
+            </Card>
+          </div>
+          <div>
+            <Card elevation={3} className="rounded-4">
+              <CardContent>
+                <h6 className="text-muted">Pending Events</h6>
+                <h2 className="fw-bold">
+                  {dashboardCount?.pendingEventQueryCount}
+                </h2>
+              </CardContent>
+            </Card>
+          </div>
+          <div>
+            <Card elevation={3} className="rounded-4">
+              <CardContent>
+                <h6 className="text-muted">Cancelled Events</h6>
+                <h2 className="fw-bold">
+                  {dashboardCount?.cancelledEventQueryCount}
+                </h2>
+              </CardContent>
+            </Card>
+          </div>
+          <div>
+            <Card elevation={3} className="rounded-4">
+              <CardContent>
+                <h6 className="text-muted">Customer Reviews</h6>
+                <h2 className="fw-bold">
+                  {dashboardCount?.reviewsCount}
+                </h2>
+              </CardContent>
+            </Card>
           </div>
         </div>
-        <div className="col-lg-5 col-md-12">
+        <div>
           <Card elevation={3} className="rounded-4">
             <CardContent>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -152,7 +148,7 @@ export default function Dashboard() {
           </Card>
         </div>
       </div>
-      <div className="row g-4 mb-4">
+      <div className="row g-4 mb-4 mt-1">
         <div className="col-12 bg-white">
           <Box sx={{ p: 1 }}>
             <Typography variant="h5" gutterBottom>
@@ -165,24 +161,30 @@ export default function Dashboard() {
                   <TableRow>
                     <TableCell>Reservation Date</TableCell>
                     <TableCell>Client Name</TableCell>
-                    <TableCell align="right">Reservation Members</TableCell>
-                    <TableCell>Reservation Type</TableCell>
-                    <TableCell align="right">Slot</TableCell>
+                    <TableCell>Branch</TableCell>
+                    <TableCell>Offer</TableCell>
+                    <TableCell>Booking Type</TableCell>
+                    <TableCell>Slot</TableCell>
+                    <TableCell>Members</TableCell>
+                    <TableCell>Remarks</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row) => (
+                  {reservations?.map((row) => (
                     <TableRow
                       key={row.id}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <TableCell component="th" scope="row">
-                        {row.id}
+                        {row.reservationDate}
                       </TableCell>
-                      <TableCell>{row.name}</TableCell>
-                      <TableCell align="right">{row.age}</TableCell>
-                      <TableCell>{row.department}</TableCell>
-                      <TableCell align="right">{row.salary}</TableCell>
+                      <TableCell>{row.userName}</TableCell>
+                      <TableCell>{row.branchName}</TableCell>
+                      <TableCell>{row.offer}</TableCell>
+                      <TableCell>{row.bookingType}</TableCell>
+                      <TableCell>{row.slot}</TableCell>
+                      <TableCell>{row.members}</TableCell>
+                      <TableCell>{row.remarks}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
