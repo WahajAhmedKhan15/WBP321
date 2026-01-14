@@ -100,8 +100,8 @@ export default function RestaurantWizard() {
   };
 
   return (
-    <div class="resturntMainDiv">
-      <p class="resturntMainHeading">ADD RESTAURANT</p>
+    <div className="resturntMainDiv">
+      <p className="resturntMainHeading">ADD RESTAURANT</p>
       <Stepper activeStep={activeStep}>
         {steps.map((label) => (
           <Step key={label}>
@@ -112,8 +112,8 @@ export default function RestaurantWizard() {
 
       <Box mt={4}>{renderStep()}</Box>
 
-      <div class="row d-flex justify-content-between">
-        <div class="col-2">
+      <div className="row d-flex justify-content-between">
+        <div className="col-2">
           <FormButton
             text="Previous"
             loading={activeStep === 0 || saving}
@@ -122,7 +122,7 @@ export default function RestaurantWizard() {
             Previous
           </FormButton>
         </div>
-        <div class="col-2">
+        <div className="col-2">
           <FormButton
             text={saving ? "Saving..." : isLastStep ? "Save" : "Next"}
             loading={saving}

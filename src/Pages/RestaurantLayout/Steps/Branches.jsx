@@ -43,7 +43,7 @@ export default function BranchLocationsStep() {
 
   return (
     <div>
-      <div class="mb-3 text-end">
+      <div className="mb-3 text-end">
         <Button
           variant="contained"
           color="primary"

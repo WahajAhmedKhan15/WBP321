@@ -14,7 +14,7 @@ export default function BasicInfoStep({ formData, setFormData }) {
   };
 
   return (
-    <div class="restaurantBI">
+    <div className="restaurantBI">
       <TextField
         label="Name"
         name="name"

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 export default function Sidebar() {
   const navigate = useNavigate();
   return (
-    <div class="sideBarDiv">
+    <div className="sideBarDiv">
       <img src="/vite.svg" onClick={() => navigate("/dashboard")} />
       <ul>
         <li>

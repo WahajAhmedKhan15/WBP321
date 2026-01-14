@@ -16,7 +16,6 @@ export default function Login() {
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
@@ -34,11 +33,11 @@ export default function Login() {
   };
 
   return (
-    <div class="containerLogin">
-      <div class="left">
-        <div class="shape one"></div>
-        <div class="shape two"></div>
-        <div class="content">
+    <div className="containerLogin">
+      <div className="left">
+        <div className="shape one"></div>
+        <div className="shape two"></div>
+        <div className="content">
           <h1>Restaurant Management System</h1>
           <p>
             Run your restaurant effortlessly. Track orders, manage inventory,
@@ -46,11 +45,11 @@ export default function Login() {
           </p>
         </div>
       </div>
-      <div class="right">
-        <div class="card">
-          <div class="logo">RMS</div>
+      <div className="right">
+        <div className="card">
+          <div className="logo">RMS</div>
           <h2>Login</h2>
-          <div class="subtitle">Access your account to continue</div>
+          <div className="subtitle">Access your account to continue</div>
 
           {errorMsg && (
             <Typography color="error" textAlign="center">
@@ -74,8 +73,9 @@ export default function Login() {
             icon={<LockIcon />}
             sx={{ mt: 2 }}
           />
-
-          <FormButton onClick={handleSubmit} loading={loading} text="Login" />
+          <div className="mt-2">
+            <FormButton onClick={handleSubmit} loading={loading} text="Login" />
+          </div>
         </div>
       </div>
     </div>

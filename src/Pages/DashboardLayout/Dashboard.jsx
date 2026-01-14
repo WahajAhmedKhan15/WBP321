@@ -1,10 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
-import api from "../Utils/api";
+import api from "../../Utils/api";
 import { Card, CardContent } from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import {
   Table,
   TableBody,
@@ -16,10 +13,12 @@ import {
   Typography,
   Box,
 } from "@mui/material";
+import HighlightCalendar from "../../UIComponents/HighlightCalendar";
 
 export default function Dashboard() {
   const [dashboardCount, setDashboardCount] = useState({});
   const [reservations, setReservations] = useState([]);
+  const [reservationDates, setReservationDates] = useState([]);
   const getDashboardCount = async () => {
     try {
       const response = await api.get("Dashboard/GetDashboardCount");
@@ -36,15 +35,26 @@ export default function Dashboard() {
       console.error("Error fetching reservation count:", error);
     }
   };
-
+  const getReservationDates = async () => {
+    try {
+      const response = await api.get(
+        "Dashboard/GetReservationDatesByStatus?Status=1"
+      );
+      setReservationDates(response.data);
+    } catch (error) {
+      console.error("Error fetching reservation count:", error);
+    }
+  };
   useEffect(() => {
     getDashboardCount();
     getReservations();
+    getReservationDates();
   }, []);
-
+  const handlePenResClick = () => {
+    window.open("/pending-reservations", "_blank"); // The route to your reviews page
+  };
   return (
     <div className="container-fluid p-4 bg-light min-vh-100">
-      <div className="dashHeading">Dashboard</div>
       <div className="dashFirstRow">
         <div className="dashFirstRowFC">
           <div>
@@ -68,7 +78,11 @@ export default function Dashboard() {
             </Card>
           </div>
           <div>
-            <Card elevation={3} className="rounded-4">
+            <Card
+              elevation={3}
+              onClick={handlePenResClick}
+              className="rounded-4 clickableCard"
+            >
               <CardContent>
                 <h6 className="text-muted">Pending Reservations</h6>
                 <h2 className="fw-bold">
@@ -108,7 +122,7 @@ export default function Dashboard() {
             </Card>
           </div>
           <div>
-            <Card elevation={3} className="rounded-4">
+            <Card elevation={3} className="rounded-4 clickableCard">
               <CardContent>
                 <h6 className="text-muted">Pending Events</h6>
                 <h2 className="fw-bold">
@@ -128,28 +142,24 @@ export default function Dashboard() {
             </Card>
           </div>
           <div>
-            <Card elevation={3} className="rounded-4">
+            <Card elevation={3} className="rounded-4 clickableCard">
               <CardContent>
                 <h6 className="text-muted">Customer Reviews</h6>
-                <h2 className="fw-bold">
-                  {dashboardCount?.reviewsCount}
-                </h2>
+                <h2 className="fw-bold">{dashboardCount?.reviewsCount}</h2>
               </CardContent>
             </Card>
           </div>
         </div>
-        <div>
-          <Card elevation={3} className="rounded-4">
-            <CardContent>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateCalendar />
-              </LocalizationProvider>
-            </CardContent>
-          </Card>
+        <div className="clndrDiv">
+          <div className="clndrDivHeader">
+            <div className="clndrDivHeaderColorBox"></div>
+            <p>Reserved Dates</p>
+          </div>
+          <HighlightCalendar highlightedDates={reservationDates} />
         </div>
       </div>
-      <div className="row g-4 mb-4 mt-1">
-        <div className="col-12 bg-white">
+      <div className="">
+        <div className="top10Div">
           <Box sx={{ p: 1 }}>
             <Typography variant="h5" gutterBottom>
               Recent Bookings

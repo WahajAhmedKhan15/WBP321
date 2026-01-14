@@ -1,25 +1,38 @@
-import * as React from "react";
+import React, { useState } from "react";
 import dayjs from "dayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 
 export default function HighlightCalendar({ highlightedDates }) {
+  const [selectedDate, setSelectedDate] = useState(dayjs());
 
-  const renderDay = (day, _value, DayComponentProps) => {
-    const isHighlighted = highlightedDates.some(
-      date => day.isSame(dayjs(date), "day")
+  const renderDay = (props) => {
+    const today = dayjs().startOf("day");
+    const day = props.day.startOf("day");
+
+    const isToday = day.isSame(today, "day");
+    const isHighlighted = highlightedDates.some(date =>
+      day.isSame(dayjs(date).startOf("day"), "day")
     );
-
     return (
       <PickersDay
-        {...DayComponentProps}
+        {...props}
+        disableMargin
         sx={{
-          backgroundColor: isHighlighted ? "#0d6efd" : "inherit",
-          color: isHighlighted ? "#fff" : "inherit",
-          "&:hover": {
-            backgroundColor: isHighlighted ? "#0b5ed7" : ""
+          backgroundColor: isHighlighted
+            ? "#2cb8cd"   
+            : isToday
+            ? "#fff"   
+            : undefined,
+          color: isHighlighted
+            ? "#fff"
+            : isToday
+            ? "#000"
+            : undefined,
+          borderRadius: "50%",
+          "&.MuiPickersDay-today": {
+            backgroundColor: isToday ? "#fff" : undefined,
+            color: isToday ? "#000" : undefined
           }
         }}
       />
@@ -27,11 +40,10 @@ export default function HighlightCalendar({ highlightedDates }) {
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DateCalendar
-        defaultValue={dayjs()}
-        slots={{ day: renderDay }}
-      />
-    </LocalizationProvider>
+    <DateCalendar
+      value={selectedDate} 
+      onChange={(newDate) => setSelectedDate(newDate)}
+      slots={{ day: renderDay }}
+    />
   );
 }

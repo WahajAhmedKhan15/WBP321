@@ -1,4 +1,4 @@
-import api from '../utils/api';
+import api from '../Utils/api';
 
 export default class AuthService {
   static async login(values) {

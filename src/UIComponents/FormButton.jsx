@@ -7,13 +7,7 @@ const FormButton = ({ onClick, loading = false, text = "Submit", sx = {} }) => {
       variant="contained"
       onClick={onClick}
       disabled={loading}
-      sx={{
-        mt: 2,
-        borderRadius: "5px",
-        backgroundColor: "#111",
-        "&:hover": { backgroundColor: "#333" },
-        sx,
-      }}
+      className="CustomButton"
     >
       {loading ? `${text}` : text}
     </Button>
