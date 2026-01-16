@@ -8,9 +8,12 @@
   --radius: 14px;
   --shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   font-family: "Inter", system-ui, sans-serif;
-
 }
-.rootDiv{
+th {
+  color: #2cb8cd !important;
+  font-weight: bold !important;
+}
+.rootDiv {
   width: 100%;
   height: 100%;
 }

@@ -51,7 +51,13 @@ export default function Dashboard() {
     getReservationDates();
   }, []);
   const handlePenResClick = () => {
-    window.open("/pending-reservations", "_blank"); // The route to your reviews page
+    window.open("/pending-reservations", "_blank");
+  };
+  const handleReviewClick = () => {
+    window.open("/reviews", "_blank");
+  };
+  const handlePenEveClick = () => {
+    window.open("/pending-events", "_blank");
   };
   return (
     <div className="container-fluid p-4 bg-light min-vh-100">
@@ -122,7 +128,11 @@ export default function Dashboard() {
             </Card>
           </div>
           <div>
-            <Card elevation={3} className="rounded-4 clickableCard">
+            <Card
+              onClick={handlePenEveClick}
+              elevation={3}
+              className="rounded-4 clickableCard"
+            >
               <CardContent>
                 <h6 className="text-muted">Pending Events</h6>
                 <h2 className="fw-bold">
@@ -142,7 +152,11 @@ export default function Dashboard() {
             </Card>
           </div>
           <div>
-            <Card elevation={3} className="rounded-4 clickableCard">
+            <Card
+              onClick={handleReviewClick}
+              elevation={3}
+              className="rounded-4 clickableCard"
+            >
               <CardContent>
                 <h6 className="text-muted">Customer Reviews</h6>
                 <h2 className="fw-bold">{dashboardCount?.reviewsCount}</h2>
@@ -185,9 +199,7 @@ export default function Dashboard() {
                       key={row.id}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      <TableCell component="th" scope="row">
-                        {row.reservationDate}
-                      </TableCell>
+                      <TableCell scope="row">{row.reservationDate}</TableCell>
                       <TableCell>{row.userName}</TableCell>
                       <TableCell>{row.branchName}</TableCell>
                       <TableCell>{row.offer}</TableCell>

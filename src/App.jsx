@@ -2,6 +2,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./Pages/Login";
 import Dashboard from "./Pages/DashboardLayout/Dashboard";
 import PendingReservation from "./Pages/DashboardLayout/DetailLayout/PendingReservation";
+import PendingEventQueries from "./Pages/DashboardLayout/DetailLayout/PendingEventQueries";
+import Reviews from "./Pages/DashboardLayout/DetailLayout/Reviews";
 import Restaurant from "./Pages/RestaurantLayout/Restaurant";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import MainLayout from "./Layouts/MainLayout";
@@ -43,6 +45,8 @@ function App() {
             path="/pending-reservations"
             element={<PendingReservation />}
           />
+          <Route path="/pending-events" element={<PendingEventQueries />} />
+          <Route path="/reviews" element={<Reviews />} />
         </Route>
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
