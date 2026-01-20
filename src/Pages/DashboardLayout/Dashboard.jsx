@@ -14,10 +14,12 @@ import {
   Box,
 } from "@mui/material";
 import HighlightCalendar from "../../UIComponents/HighlightCalendar";
+import { toast } from "react-toastify";
 
 export default function Dashboard() {
   const [dashboardCount, setDashboardCount] = useState({});
   const [reservations, setReservations] = useState([]);
+  const [graphReservations, setGraphReservations] = useState([]);
   const [reservationDates, setReservationDates] = useState([]);
   const getDashboardCount = async () => {
     try {
@@ -31,6 +33,7 @@ export default function Dashboard() {
     try {
       const response = await api.get("Dashboard/GetTop10ConfirmedReservation");
       setReservations(response.data);
+      setGraphReservations(response.data);
     } catch (error) {
       console.error("Error fetching reservation count:", error);
     }
@@ -38,7 +41,7 @@ export default function Dashboard() {
   const getReservationDates = async () => {
     try {
       const response = await api.get(
-        "Dashboard/GetReservationDatesByStatus?Status=1"
+        "Dashboard/GetReservationDatesByStatus?Status=1",
       );
       setReservationDates(response.data);
     } catch (error) {
@@ -56,15 +59,45 @@ export default function Dashboard() {
   const handleReviewClick = () => {
     window.open("/reviews", "_blank");
   };
+  const handleTotalResClick = () => {
+    window.open("/total-reservations", "_blank");
+  };
+  const handleConfirmResClick = () => {
+    window.open("/confirmed-reservations", "_blank");
+  };
+  const handleCancelResClick = () => {
+    window.open("/cancelled-reservations", "_blank");
+  };
   const handlePenEveClick = () => {
     window.open("/pending-events", "_blank");
+  };
+  const handleTotalEveClick = () => {
+    window.open("/total-events", "_blank");
+  };
+  const handleConfEveClick = () => {
+    window.open("/confirmed-events", "_blank");
+  };
+  const handleCancEveClick = () => {
+    window.open("/cancelled-events", "_blank");
+  };
+  const handleDateSelect = (date) => {
+    const formattedDate = date.format("YYYY-MM-DD");
+    const filtered = reservations.filter((r) => r.reservationDate === formattedDate);
+    if(filtered.length > 0)
+      setGraphReservations(filtered);
+    else
+      toast.error("No reservation found on the selected date!");
   };
   return (
     <div className="container-fluid p-4 bg-light min-vh-100">
       <div className="dashFirstRow">
         <div className="dashFirstRowFC">
           <div>
-            <Card elevation={3} className="rounded-4">
+            <Card
+              elevation={3}
+              onClick={handleTotalResClick}
+              className="rounded-4 clickableCard"
+            >
               <CardContent>
                 <h6 className="text-muted">Total Reservations</h6>
                 <h2 className="fw-bold">
@@ -74,7 +107,11 @@ export default function Dashboard() {
             </Card>
           </div>
           <div>
-            <Card elevation={3} className="rounded-4">
+            <Card
+              elevation={3}
+              onClick={handleConfirmResClick}
+              className="rounded-4 clickableCard"
+            >
               <CardContent>
                 <h6 className="text-muted">Confirmed Reservations</h6>
                 <h2 className="fw-bold">
@@ -98,7 +135,11 @@ export default function Dashboard() {
             </Card>
           </div>
           <div>
-            <Card elevation={3} className="rounded-4">
+            <Card
+              elevation={3}
+              onClick={handleCancelResClick}
+              className="rounded-4 clickableCard"
+            >
               <CardContent>
                 <h6 className="text-muted">Cancelled Reservations</h6>
                 <h2 className="fw-bold">
@@ -108,7 +149,11 @@ export default function Dashboard() {
             </Card>
           </div>
           <div>
-            <Card elevation={3} className="rounded-4">
+            <Card
+              elevation={3}
+              onClick={handleTotalEveClick}
+              className="rounded-4 clickableCard"
+            >
               <CardContent>
                 <h6 className="text-muted">Total Events</h6>
                 <h2 className="fw-bold">
@@ -118,7 +163,11 @@ export default function Dashboard() {
             </Card>
           </div>
           <div>
-            <Card elevation={3} className="rounded-4">
+            <Card
+              elevation={3}
+              onClick={handleConfEveClick}
+              className="rounded-4 clickableCard"
+            >
               <CardContent>
                 <h6 className="text-muted">Confirmed Events</h6>
                 <h2 className="fw-bold">
@@ -142,7 +191,11 @@ export default function Dashboard() {
             </Card>
           </div>
           <div>
-            <Card elevation={3} className="rounded-4">
+            <Card
+              elevation={3}
+              onClick={handleCancEveClick}
+              className="rounded-4 clickableCard"
+            >
               <CardContent>
                 <h6 className="text-muted">Cancelled Events</h6>
                 <h2 className="fw-bold">
@@ -169,7 +222,10 @@ export default function Dashboard() {
             <div className="clndrDivHeaderColorBox"></div>
             <p>Reserved Dates</p>
           </div>
-          <HighlightCalendar highlightedDates={reservationDates} />
+          <HighlightCalendar
+            highlightedDates={reservationDates}
+            onDateChange={handleDateSelect}
+          />
         </div>
       </div>
       <div className="">
@@ -194,7 +250,7 @@ export default function Dashboard() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {reservations?.map((row) => (
+                  {graphReservations?.map((row) => (
                     <TableRow
                       key={row.id}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
