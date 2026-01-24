@@ -82,11 +82,11 @@ export default function Dashboard() {
   };
   const handleDateSelect = (date) => {
     const formattedDate = date.format("YYYY-MM-DD");
-    const filtered = reservations.filter((r) => r.reservationDate === formattedDate);
-    if(filtered.length > 0)
-      setGraphReservations(filtered);
-    else
-      toast.error("No reservation found on the selected date!");
+    const filtered = reservations.filter(
+      (r) => r.reservationDate === formattedDate,
+    );
+    if (filtered.length > 0) setGraphReservations(filtered);
+    else toast.error("No reservation found on the selected date!");
   };
   return (
     <div className="container-fluid p-4 bg-light min-vh-100">
