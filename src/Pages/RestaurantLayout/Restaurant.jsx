@@ -6,7 +6,8 @@ import MediaStep from "./Steps/MediaStep";
 import ServicesStep from "./Steps/ServicesStep";
 import Branches from "./Steps/Branches";
 import TimingSlot from "./Steps/TimingSlot";
-// import api from "./api";
+import { toast } from "react-toastify";
+import api from "../../Utils/api";
 
 const steps = ["Basic Info", "Media", "Services", "Branches", "Timing & Slots"];
 
@@ -29,59 +30,13 @@ export default function RestaurantWizard() {
       gallery: [],
     },
     services: {
-      offers: [],
       bookingTypes: [],
+      offers: [],
     },
+    branches: [],
+    slots: [],
   });
-
   const isLastStep = activeStep === steps.length - 1;
-
-  const handleSave = async () => {
-    // try {
-    //   setSaving(true);
-    //   // 1️⃣ Save Restaurant
-    //   const res = await api.saveRestaurant(formData.basicInfo);
-    //   const restaurantId = res.data.id;
-    //   // 2️⃣ Save Media
-    //   const mediaForm = new FormData();
-    //   mediaForm.append("RestaurantId", restaurantId);
-    //   if (formData.media.logo)
-    //     mediaForm.append("Logo", formData.media.logo);
-    //   if (formData.media.banner)
-    //     mediaForm.append("Banner", formData.media.banner);
-    //   formData.media.gallery.forEach(img =>
-    //     mediaForm.append("Gallery", img)
-    //   );
-    //   await api.saveMedia(mediaForm);
-    //   // 3️⃣ Save Offers
-    //   for (const offer of formData.services.offers) {
-    //     await api.saveOffer({
-    //       id: 0,
-    //       restaurantId,
-    //       branchId: 0,
-    //       offer,
-    //       isActive: true,
-    //     });
-    //   }
-    //   // 4️⃣ Save Booking Types
-    //   for (const type of formData.services.bookingTypes) {
-    //     await api.saveBookingType({
-    //       id: 0,
-    //       restaurantId,
-    //       branchId: 0,
-    //       name: type,
-    //       isActive: true,
-    //     });
-    //   }
-    //   alert("Restaurant saved successfully!");
-    // } catch (error) {
-    //   console.error(error);
-    //   alert("Error while saving restaurant");
-    // } finally {
-    //   setSaving(false);
-    // }
-  };
-
   const renderStep = () => {
     switch (activeStep) {
       case 0:
@@ -98,6 +53,75 @@ export default function RestaurantWizard() {
         return null;
     }
   };
+  const handleSave = async () => {
+    const payload = {
+      restaurant: {
+        name: formData.basicInfo.name,
+        about_Description: formData.basicInfo.about_Description,
+        cuisineType: formData.basicInfo.cuisineType,
+        priceRange: formData.basicInfo.priceRange,
+        isActive: formData.basicInfo.isActive,
+      },
+      images: [
+        formData.media.logo && {
+          imageType: "LOGO",
+          file: formData.media.logo,
+        },
+        formData.media.banner && {
+          imageType: "BANNER",
+          file: formData.media.banner,
+        },
+        ...formData.media.gallery.map((g) => ({
+          imageType: "GALLERY",
+          file: g,
+        })),
+      ].filter(Boolean),
+      bookingTypes: formData.services.bookingTypes.join(","),
+      offers: formData.services.offers.join(","),
+      branches: formData.branches,
+      slots: formData.slots,
+    };
+    if (!payload.restaurant.name || !payload.restaurant.about_Description) {
+      toast.error("Basic Info Tab is required!");
+      return;
+    } else if (payload.images && payload.images.length === 0) {
+      toast.error("Media Tab is required!");
+      return;
+    } else if (payload.offers === "" || payload.bookingTypes === "") {
+      toast.error("Services Tab is required!");
+      return;
+    } else if (payload.branches && payload.branches.length === 0) {
+      toast.error("Branches Tab is required!");
+      return;
+    } else if (payload.slots && payload.slots.length === 0) {
+      toast.error("Timing & Slots Tab is required!");
+      return;
+    }
+    // setSaving(true);
+    const response = await api.post("/Resturant/CreateRestaurant", payload);
+    setFormData({
+      basicInfo: {
+        id: 0,
+        name: "",
+        about_Description: "",
+        cuisineType: "",
+        priceRange: "",
+        isActive: true,
+      },
+      media: {
+        logo: null,
+        banner: null,
+        gallery: [],
+      },
+      services: {
+        bookingTypes: [],
+        offers: [],
+      },
+      branches: [],
+      slots: [],
+    });
+    // setSaving(false);
+  };
 
   return (
     <div className="resturntMainDiv">
@@ -112,7 +136,7 @@ export default function RestaurantWizard() {
 
       <Box mt={4}>{renderStep()}</Box>
 
-      <div className="row d-flex justify-content-between">
+      <div className="row d-flex justify-content-between mt-3">
         <div className="col-2">
           <FormButton
             text="Previous"
@@ -126,9 +150,15 @@ export default function RestaurantWizard() {
           <FormButton
             text={saving ? "Saving..." : isLastStep ? "Save" : "Next"}
             loading={saving}
-            onClick={
-              isLastStep ? handleSave : () => setActiveStep((p) => p + 1)
-            }
+            onClick={() => {
+              if (isLastStep) {
+                handleSave();
+              } else {
+                if (renderStep()) {
+                  setActiveStep((p) => p + 1);
+                }
+              }
+            }}
           ></FormButton>
         </div>
       </div>

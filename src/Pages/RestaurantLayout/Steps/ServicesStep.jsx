@@ -31,26 +31,47 @@ export default function ServicesStep({ formData, setFormData }) {
         {BOOKINGS.map((b) => (
           <FormControlLabel
             key={b}
-            control={<Checkbox onChange={() => toggle("bookingTypes", b)} />}
+            control={
+              <Checkbox
+                checked={formData.services.bookingTypes.includes(b)}
+                onChange={() => toggle("bookingTypes", b)}
+              />
+            }
             label={b}
           />
         ))}
       </FormGroup>
+
       <Typography variant="h6">Buffet Types Available</Typography>
       <FormGroup>
         {OFFERS.map((o) => (
           <FormControlLabel
             key={o}
-            control={<Checkbox onChange={() => toggle("offers", o)} />}
+            control={
+              <Checkbox
+                checked={formData.services.offers.includes(o)}
+                onChange={() => toggle("offers", o)}
+              />
+            }
             label={o}
           />
         ))}
       </FormGroup>
+
       <div className="row p-2">
         <TextField
           label="Offer Tags (Comma-Seprated)"
           name="offers"
-          // onChange={handleChange}
+          value={formData.services.offers.join(",")}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              services: {
+                ...formData.services,
+                offers: e.target.value.split(","),
+              },
+            })
+          }
         />
       </div>
     </>

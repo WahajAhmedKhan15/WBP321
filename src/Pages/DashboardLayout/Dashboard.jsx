@@ -240,7 +240,9 @@ export default function Dashboard() {
                 <TableHead>
                   <TableRow>
                     <TableCell>Reservation Date</TableCell>
-                    <TableCell>Client Name</TableCell>
+                    <TableCell>Reservation By</TableCell>
+                    <TableCell>Reservation Name</TableCell>
+                    <TableCell>Contact Number</TableCell>
                     <TableCell>Branch</TableCell>
                     <TableCell>Offer</TableCell>
                     <TableCell>Booking Type</TableCell>
@@ -257,6 +259,8 @@ export default function Dashboard() {
                     >
                       <TableCell scope="row">{row.reservationDate}</TableCell>
                       <TableCell>{row.userName}</TableCell>
+                      <TableCell>{row.reservationName}</TableCell>
+                      <TableCell>{row.phoneNo}</TableCell>
                       <TableCell>{row.branchName}</TableCell>
                       <TableCell>{row.offer}</TableCell>
                       <TableCell>{row.bookingType}</TableCell>

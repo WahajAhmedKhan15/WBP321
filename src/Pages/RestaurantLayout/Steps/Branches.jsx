@@ -10,8 +10,9 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import { toast } from "react-toastify";
 
-export default function BranchLocationsStep() {
+export default function Branches({ formData, setFormData }) {
   const [branch, setBranch] = useState({
     branchName: "",
     address: "",
@@ -19,26 +20,22 @@ export default function BranchLocationsStep() {
     email: "",
   });
 
-  const [branches, setBranches] = useState([]);
-
   const handleChange = (e) => {
-    setBranch({
-      ...branch,
-      [e.target.name]: e.target.value,
-    });
+    setBranch({ ...branch, [e.target.name]: e.target.value });
   };
 
   const handleAdd = () => {
-    if (!branch.branchName || !branch.address) return;
+    if (!branch.branchName || !branch.address || !branch.phone) {
+      toast.error("Branch Name, Address or Phone Number is required!");
+      return;
+    }
 
-    setBranches([...branches, branch]);
-
-    setBranch({
-      branchName: "",
-      address: "",
-      phone: "",
-      email: "",
+    setFormData({
+      ...formData,
+      branches: [...formData.branches, branch],
     });
+
+    setBranch({ branchName: "", address: "", phone: "", email: "" });
   };
 
   return (
@@ -53,6 +50,7 @@ export default function BranchLocationsStep() {
           Add Branch
         </Button>
       </div>
+
       <div className="restaurantBr">
         <TextField
           label="Branch Name"
@@ -81,8 +79,9 @@ export default function BranchLocationsStep() {
           onChange={handleChange}
         />
       </div>
+
       <div>
-        {branches.length > 0 && (
+        {formData.branches.length > 0 && (
           <TableContainer component={Paper} style={{ marginTop: "24px" }}>
             <Table>
               <TableHead>
@@ -94,7 +93,7 @@ export default function BranchLocationsStep() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {branches.map((b, index) => (
+                {formData.branches.map((b, index) => (
                   <TableRow key={index}>
                     <TableCell>{b.branchName}</TableCell>
                     <TableCell>{b.address}</TableCell>
