@@ -7,7 +7,6 @@ export default function MediaStep({ formData, setFormData }) {
   const bannerInputRef = useRef(null);
   const galleryInputRef = useRef(null);
 
-  // Convert File → Base64
   const toBase64 = (file) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -127,8 +126,6 @@ export default function MediaStep({ formData, setFormData }) {
         src={formData.media.logo}
         onRemove={() => removeMedia("logo", logoInputRef)}
       />
-
-      {/* Banner */}
       <p>Banner / Thumbnail Image</p>
       <Button component="label" variant="outlined">
         Upload Image
@@ -144,8 +141,6 @@ export default function MediaStep({ formData, setFormData }) {
         src={formData.media.banner}
         onRemove={() => removeMedia("banner", bannerInputRef)}
       />
-
-      {/* Gallery */}
       <p>Gallery Images (Multiple)</p>
       <Button component="label" variant="outlined">
         Upload Images
@@ -158,7 +153,6 @@ export default function MediaStep({ formData, setFormData }) {
           onChange={(e) => updateGallery(e.target.files)}
         />
       </Button>
-
       <Box display="flex" gap={2} flexWrap="wrap">
         {formData.media.gallery.map((img, index) => (
           <ImageWithBar

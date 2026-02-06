@@ -54,73 +54,85 @@ export default function RestaurantWizard() {
     }
   };
   const handleSave = async () => {
-    const payload = {
-      restaurant: {
-        name: formData.basicInfo.name,
-        about_Description: formData.basicInfo.about_Description,
-        cuisineType: formData.basicInfo.cuisineType,
-        priceRange: formData.basicInfo.priceRange,
-        isActive: formData.basicInfo.isActive,
-      },
-      images: [
-        formData.media.logo && {
-          imageType: "LOGO",
-          file: formData.media.logo,
+    try {
+      const payload = {
+        restaurant: {
+          name: formData.basicInfo.name,
+          about_Description: formData.basicInfo.about_Description,
+          cuisineType: formData.basicInfo.cuisineType,
+          priceRange: formData.basicInfo.priceRange,
+          isActive: formData.basicInfo.isActive,
         },
-        formData.media.banner && {
-          imageType: "BANNER",
-          file: formData.media.banner,
-        },
-        ...formData.media.gallery.map((g) => ({
-          imageType: "GALLERY",
-          file: g,
-        })),
-      ].filter(Boolean),
-      bookingTypes: formData.services.bookingTypes.join(","),
-      offers: formData.services.offers.join(","),
-      branches: formData.branches,
-      slots: formData.slots,
-    };
-    if (!payload.restaurant.name || !payload.restaurant.about_Description) {
-      toast.error("Basic Info Tab is required!");
-      return;
-    } else if (payload.images && payload.images.length === 0) {
-      toast.error("Media Tab is required!");
-      return;
-    } else if (payload.offers === "" || payload.bookingTypes === "") {
-      toast.error("Services Tab is required!");
-      return;
-    } else if (payload.branches && payload.branches.length === 0) {
-      toast.error("Branches Tab is required!");
-      return;
-    } else if (payload.slots && payload.slots.length === 0) {
-      toast.error("Timing & Slots Tab is required!");
-      return;
+        images: [
+          formData.media.logo && {
+            imageType: "Logo",
+            file: formData.media.logo,
+          },
+          formData.media.banner && {
+            imageType: "Banner",
+            file: formData.media.banner,
+          },
+          ...formData.media.gallery.map((g) => ({
+            imageType: "Gallery",
+            file: g,
+          })),
+        ].filter(Boolean),
+        bookingTypes: formData.services.bookingTypes.join(","),
+        offers: formData.services.offers.join(","),
+        branches: formData.branches,
+        slots: formData.slots,
+      };
+      if (!payload.restaurant.name || !payload.restaurant.about_Description) {
+        toast.error("Basic Info Tab is required!");
+        return;
+      } else if (payload.images && payload.images.length === 0) {
+        toast.error("Media Tab is required!");
+        return;
+      } else if (payload.offers === "" || payload.bookingTypes === "") {
+        toast.error("Services Tab is required!");
+        return;
+      } else if (payload.branches && payload.branches.length === 0) {
+        toast.error("Branches Tab is required!");
+        return;
+      } else if (payload.slots && payload.slots.length === 0) {
+        toast.error("Timing & Slots Tab is required!");
+        return;
+      }
+      setSaving(true);
+      const response = await api.post("/Resturant/CreateRestaurant", payload);
+      if (response.data.success) {
+        setFormData({
+          basicInfo: {
+            id: 0,
+            name: "",
+            about_Description: "",
+            cuisineType: "",
+            priceRange: "",
+            isActive: true,
+          },
+          media: {
+            logo: null,
+            banner: null,
+            gallery: [],
+          },
+          services: {
+            bookingTypes: [],
+            offers: [],
+          },
+          branches: [],
+          slots: [],
+        });
+        setActiveStep(0);
+        setSaving(false);
+        toast.success(response.data.message);
+      } else {
+        setSaving(false);
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      setSaving(false);
+      console.error("Error posting reservation:", error);
     }
-    // setSaving(true);
-    const response = await api.post("/Resturant/CreateRestaurant", payload);
-    setFormData({
-      basicInfo: {
-        id: 0,
-        name: "",
-        about_Description: "",
-        cuisineType: "",
-        priceRange: "",
-        isActive: true,
-      },
-      media: {
-        logo: null,
-        banner: null,
-        gallery: [],
-      },
-      services: {
-        bookingTypes: [],
-        offers: [],
-      },
-      branches: [],
-      slots: [],
-    });
-    // setSaving(false);
   };
 
   return (

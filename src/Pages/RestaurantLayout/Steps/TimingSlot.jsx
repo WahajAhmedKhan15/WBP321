@@ -17,7 +17,6 @@ const DAYS = [
 ];
 
 export default function TimingSlot({ formData, setFormData }) {
-
   const toggleDay = (day) => {
     const exists = formData.slots.find((x) => x.day === day);
 
@@ -99,10 +98,8 @@ export default function TimingSlot({ formData, setFormData }) {
           <TextField
             className="w-100"
             label="Maximum Capacity (guests)"
-            type="number"            
-            onChange={(e) =>
-              updateSlot("maximum_Capacity", e.target.value)
-            }
+            type="number"
+            onChange={(e) => updateSlot("maximum_Capacity", e.target.value)}
           />
         </div>
       </div>

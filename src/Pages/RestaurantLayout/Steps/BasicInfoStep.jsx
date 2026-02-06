@@ -15,7 +15,12 @@ export default function BasicInfoStep({ formData, setFormData }) {
 
   return (
     <div className="restaurantBI">
-      <TextField label="Name" name="name" value={data.name} onChange={handleChange} />
+      <TextField
+        label="Name"
+        name="name"
+        value={data.name}
+        onChange={handleChange}
+      />
       <TextField
         label="About"
         name="about_Description"
